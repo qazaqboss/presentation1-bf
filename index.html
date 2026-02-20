@@ -50,6 +50,7 @@
 
         .presentation {
             height: 100vh;
+            height: 100dvh;
             width: 100vw;
             position: relative;
         }
@@ -63,18 +64,35 @@
             padding: 5% 10%;
             opacity: 0;
             visibility: hidden;
+            pointer-events: none;
+            z-index: 1;
             transform: scale(0.98);
             transition: var(--transition);
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
+            background-color: var(--bg-deep);
             background: linear-gradient(180deg, var(--bg-deep) 0%, #050605 100%);
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
         }
 
         .slide.active {
             opacity: 1;
             visibility: visible;
+            pointer-events: auto;
+            z-index: 10;
             transform: scale(1);
+        }
+
+        /* Prevent button overlap on scroll */
+        .slide::after {
+            content: '';
+            display: block;
+            min-height: 15vh;
+            width: 100%;
+            flex-shrink: 0;
         }
 
         /* Nav & Progress */
@@ -140,12 +158,14 @@
             font-weight: 800;
             font-size: 1.2rem;
             color: var(--secondary);
+            white-space: nowrap;
         }
 
         .brand-logo div:last-child {
             font-size: 0.7rem;
             color: var(--text-dim);
             letter-spacing: 3px;
+            white-space: nowrap;
         }
 
         /* Slide Content Helpers */
@@ -299,7 +319,7 @@
 
         .profit-line-container {
             position: relative;
-            height: 300px;
+            height: 250px;
             width: 100%;
             margin-top: 2rem;
             border-left: 1px solid var(--border);
@@ -372,6 +392,97 @@
 
         .delay-3 {
             animation-delay: 0.6s;
+        }
+
+        /* Mobile Adaptations */
+        @media screen and (max-width: 768px) {
+            .slide {
+                padding: 70px 6% 20px 6%;
+            }
+
+            .slide-title h2 {
+                font-size: 1.5rem;
+            }
+
+            .brand-logo {
+                top: 15px;
+                right: 15px;
+                padding-right: 10px;
+            }
+
+            .brand-logo div:first-child {
+                font-size: 0.9rem;
+            }
+
+            .brand-logo div:last-child {
+                font-size: 0.5rem;
+                letter-spacing: 1px;
+            }
+
+            .controls {
+                bottom: 15px;
+                right: 0;
+                left: 0;
+                justify-content: center;
+                width: 100%;
+                padding: 0 15px;
+                gap: 10px;
+            }
+
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.7rem;
+                flex: 1;
+                max-width: 150px;
+                text-align: center;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .info-card {
+                padding: 1.5rem;
+            }
+
+            .data-value {
+                font-size: 1.4rem;
+            }
+
+            .title-hero h1 {
+                font-size: 2.2rem !important;
+            }
+
+            .title-hero p {
+                font-size: 1rem !important;
+                letter-spacing: 2px !important;
+            }
+
+            .chart-container {
+                height: 200px;
+            }
+
+            .chart-bar {
+                width: 25px;
+            }
+
+            .table-container {
+                width: 100%;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                margin-top: 1rem;
+                border: 1px solid var(--border);
+            }
+
+            table {
+                min-width: 600px;
+                margin-top: 0;
+            }
+
+            .profit-line-container {
+                height: 200px;
+            }
         }
 
         /* Print Styles */
@@ -668,37 +779,39 @@
             <div class="slide-title animate">
                 <h2>АВТО: Квалификация по году выпуска</h2>
             </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Страна производства</th>
-                        <th>Макс. возраст (на 2024 г)</th>
-                        <th>Условие выпуска</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Корея</td>
-                        <td>3 года</td>
-                        <td>не старше 2021 года</td>
-                    </tr>
-                    <tr>
-                        <td>Япония</td>
-                        <td>4 года</td>
-                        <td>не старше 2020 года</td>
-                    </tr>
-                    <tr>
-                        <td>Европа</td>
-                        <td>6 лет</td>
-                        <td>не старше 2018 года</td>
-                    </tr>
-                    <tr>
-                        <td>КНР / КНДР</td>
-                        <td>2 года</td>
-                        <td>не старше 2022 года</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="table-container animate delay-1">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Страна производства</th>
+                            <th>Макс. возраст (на 2024 г)</th>
+                            <th>Условие выпуска</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Корея</td>
+                            <td>3 года</td>
+                            <td>не старше 2021 года</td>
+                        </tr>
+                        <tr>
+                            <td>Япония</td>
+                            <td>4 года</td>
+                            <td>не старше 2020 года</td>
+                        </tr>
+                        <tr>
+                            <td>Европа</td>
+                            <td>6 лет</td>
+                            <td>не старше 2018 года</td>
+                        </tr>
+                        <tr>
+                            <td>КНР / КНДР</td>
+                            <td>2 года</td>
+                            <td>не старше 2022 года</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- Slide 9: Продукт "Недвижимость" (Detail 1) -->
@@ -919,47 +1032,49 @@
             <div class="slide-title animate">
                 <h2>Сводная таблица параметров</h2>
             </div>
-            <table style="font-size: 0.85rem;">
-                <thead>
-                    <tr>
-                        <th>Продукт</th>
-                        <th>Макс. Лимит</th>
-                        <th>Ставка (мин-макс)</th>
-                        <th>Срок (мес)</th>
-                        <th>Обеспечение</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Беззалоговый</td>
-                        <td>2 000 000 ₸</td>
-                        <td>36.0% - 39.0%</td>
-                        <td>до 24</td>
-                        <td>Гарантия (опц.)</td>
-                    </tr>
-                    <tr>
-                        <td>С Гарантией</td>
-                        <td>3 000 000 ₸</td>
-                        <td>35.0% - 38.0%</td>
-                        <td>до 36</td>
-                        <td>Гарантия (обяз.)</td>
-                    </tr>
-                    <tr>
-                        <td>Залог Авто</td>
-                        <td>15 000 000 ₸</td>
-                        <td>34.0% - 37.5%</td>
-                        <td>13 - 36</td>
-                        <td>Авто (LTV 50%)</td>
-                    </tr>
-                    <tr>
-                        <td>Недвижимость</td>
-                        <td>30 000 000 ₸</td>
-                        <td>33.0% - 36.0%</td>
-                        <td>13 - 36</td>
-                        <td>Квартира (70% покр)</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="table-container animate delay-1">
+                <table style="font-size: 0.85rem;">
+                    <thead>
+                        <tr>
+                            <th>Продукт</th>
+                            <th>Макс. Лимит</th>
+                            <th>Ставка (мин-макс)</th>
+                            <th>Срок (мес)</th>
+                            <th>Обеспечение</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Беззалоговый</td>
+                            <td>2 000 000 ₸</td>
+                            <td>36.0% - 39.0%</td>
+                            <td>до 24</td>
+                            <td>Гарантия (опц.)</td>
+                        </tr>
+                        <tr>
+                            <td>С Гарантией</td>
+                            <td>3 000 000 ₸</td>
+                            <td>35.0% - 38.0%</td>
+                            <td>до 36</td>
+                            <td>Гарантия (обяз.)</td>
+                        </tr>
+                        <tr>
+                            <td>Залог Авто</td>
+                            <td>15 000 000 ₸</td>
+                            <td>34.0% - 37.5%</td>
+                            <td>13 - 36</td>
+                            <td>Авто (LTV 50%)</td>
+                        </tr>
+                        <tr>
+                            <td>Недвижимость</td>
+                            <td>30 000 000 ₸</td>
+                            <td>33.0% - 36.0%</td>
+                            <td>13 - 36</td>
+                            <td>Квартира (70% покр)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- Slide 19: Dispute Resolution -->
@@ -1059,9 +1174,10 @@
                     <div class="trend-node" style="left: 90%; bottom: 100%;">
                         <div class="trend-label">44.9K</div>
                     </div>
-                    <!-- SVG Path for the line -->
-                    <svg width="100%" height="100%" style="position:absolute; top:0; left:0;">
-                        <polyline points="144,195 432,219 720,174 1008,90 1296,0" fill="none" stroke="var(--secondary)"
+                    <!-- SVG Path for the line using viewBox for responsiveness -->
+                    <svg viewBox="0 0 1000 250" preserveAspectRatio="none"
+                        style="position:absolute; top:0; left:0; width:100%; height:100%;">
+                        <polyline points="100,200 300,215 500,180 700,120 900,20" fill="none" stroke="var(--secondary)"
                             stroke-width="3" stroke-dasharray="2000" stroke-dashoffset="2000" class="draw-line" />
                     </svg>
                     <style>
