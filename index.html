@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Finance - Полный управленческий отчет</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00332a;
+            /* Темный изумруд */
+            --primary-mid: #004d40;
+            --secondary: #d4af37;
+            /* Металлический золотой */
+            --accent: #c5a059;
+            --text-main: #e0e0e0;
+            --text-dim: #b0b0b0;
+            --bg-deep: #0a0c0b;
+            --bg-card: #141817;
+            --border: rgba(212, 175, 55, 0.2);
+            --transition: all 0.5s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            background-color: var(--bg-deep);
+            overflow: hidden;
+            line-height: 1.5;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Montserrat', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .presentation {
+            height: 100vh;
+            width: 100vw;
+            position: relative;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 5% 10%;
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.98);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            background: linear-gradient(180deg, var(--bg-deep) 0%, #050605 100%);
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+        }
+
+        /* Nav & Progress */
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            right: 50px;
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .btn {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--secondary);
+            border: 1px solid var(--border);
+            padding: 12px 24px;
+            cursor: pointer;
+            border-radius: 2px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: var(--transition);
+        }
+
+        .btn:hover {
+            background: var(--secondary);
+            color: var(--primary);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 2000;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--secondary);
+            width: 0%;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px var(--secondary);
+        }
+
+        /* Branding */
+        .brand-logo {
+            position: fixed;
+            top: 30px;
+            right: 50px;
+            text-align: right;
+            border-right: 3px solid var(--secondary);
+            padding-right: 15px;
+            z-index: 1000;
+        }
+
+        .brand-logo div:first-child {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--secondary);
+        }
+
+        .brand-logo div:last-child {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            letter-spacing: 3px;
+        }
+
+        /* Slide Content Helpers */
+        .slide-title {
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .slide-title h2 {
+            font-size: 2.2rem;
+            color: var(--text-main);
+        }
+
+        .slide-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--secondary);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .info-card {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 4px;
+            border-left: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--secondary), transparent);
+        }
+
+        .info-card h3 {
+            color: var(--secondary);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+
+        .data-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .data-label {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+        }
+
+        .bullet-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .bullet-list li {
+            padding-left: 20px;
+            position: relative;
+            margin-bottom: 0.8rem;
+            font-size: 0.95rem;
+        }
+
+        .bullet-list li::before {
+            content: '▫';
+            position: absolute;
+            left: 0;
+            color: var(--secondary);
+        }
+
+        /* Specifically for Examples / Math */
+        .math-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px dashed var(--border);
+            padding: 1.5rem;
+            font-family: 'Courier New', monospace;
+            color: #a5d6a7;
+            margin-top: 1rem;
+        }
+
+        /* Charts & Infographics */
+        .chart-container {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 300px;
+            margin-top: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+            gap: 10px;
+        }
+
+        .chart-bar-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            height: 100%;
+            justify-content: flex-end;
+        }
+
+        .chart-bar {
+            width: 40px;
+            background: linear-gradient(0deg, var(--primary), var(--secondary));
+            border-radius: 2px 2px 0 0;
+            transition: height 1s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.1);
+        }
+
+        .chart-bar:hover {
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
+            filter: brightness(1.2);
+        }
+
+        .chart-label {
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            font-weight: 600;
+        }
+
+        .chart-value {
+            position: absolute;
+            top: -25px;
+            width: 100%;
+            text-align: center;
+            font-size: 0.7rem;
+            color: var(--secondary);
+            font-weight: 700;
+        }
+
+        .profit-line-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+            margin-top: 2rem;
+            border-left: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .trend-node {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: var(--secondary);
+            border: 3px solid var(--primary);
+            border-radius: 50%;
+            transform: translate(-50%, 50%);
+            z-index: 2;
+            box-shadow: 0 0 10px var(--secondary);
+        }
+
+        .trend-label {
+            position: absolute;
+            transform: translate(-50%, -25px);
+            font-size: 0.75rem;
+            color: var(--secondary);
+            font-weight: 700;
+        }
+
+        .analytics-summary {
+            background: rgba(212, 175, 55, 0.05);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+        }
+
+        .growth-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background: var(--secondary);
+            color: var(--primary);
+            font-weight: 800;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-right: 1rem;
+        }
+
+        /* Animations */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .active .animate {
+            animation: slideUp 0.8s ease forwards;
+        }
+
+        .delay-1 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-2 {
+            animation-delay: 0.4s;
+        }
+
+        .delay-3 {
+            animation-delay: 0.6s;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                overflow: visible !important;
+                background: white !important;
+                color: black !important;
+            }
+
+            .presentation {
+                height: auto !important;
+                width: auto !important;
+                position: static !important;
+            }
+
+            .slide {
+                position: relative !important;
+                top: 0 !important;
+                left: 0 !important;
+                width: 100% !important;
+                height: 100vh !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                transform: none !important;
+                page-break-after: always !important;
+                display: flex !important;
+                background: white !important;
+                color: black !important;
+                padding: 40px !important;
+                box-sizing: border-box !important;
+                border: none !important;
+            }
+
+            .slide * {
+                animation: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+                transition: none !important;
+            }
+
+            .controls,
+            .progress-container,
+            .brand-logo,
+            #export-btn {
+                display: none !important;
+            }
+
+            h1,
+            h2,
+            h3,
+            .data-value,
+            .chart-value,
+            .trend-label {
+                color: #00332a !important;
+            }
+
+            .info-card {
+                background: #f9f9f9 !important;
+                border: 1px solid #ddd !important;
+                color: black !important;
+            }
+
+            .info-card::before {
+                background: #00332a !important;
+            }
+
+            .bullet-list li::before {
+                color: #00332a !important;
+            }
+
+            .chart-bar {
+                background: #00332a !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            table {
+                background: white !important;
+                color: black !important;
+                border: 1px solid #ccc !important;
+            }
+
+            th {
+                background: #eee !important;
+                color: black !important;
+            }
+
+            td {
+                border-bottom: 1px solid #eee !important;
+            }
+
+            .math-box {
+                background: #f0f0f0 !important;
+                color: black !important;
+                border: 1px solid #ccc !important;
+            }
+
+            .analytics-summary {
+                background: #f5f5f5 !important;
+                border: 1px solid #ddd !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="progress-container">
+        <div class="progress-bar" id="progress"></div>
+    </div>
+
+    <div class="brand-logo">
+        <div>BUSINESS FINANCE</div>
+        <div>MANAGEMENT REPORT</div>
+    </div>
+
+    <div class="presentation">
+
+        <!-- Slide 1: Title -->
+        <div class="slide title-hero active" id="slide-0"
+            style="justify-content: center; align-items: center; text-align: center;">
+            <h1 class="animate" style="font-size: 4.5rem; color: var(--secondary); margin-bottom: 0;">BUSINESS FINANCE
+            </h1>
+            <div class="animate delay-1"
+                style="height: 2px; width: 300px; background: var(--secondary); margin: 2rem 0;"></div>
+            <p class="animate delay-2" style="font-size: 1.4rem; letter-spacing: 5px; color: var(--text-dim);">
+                УПРАВЛЕНЧЕСКИЙ ОТЧЕТ 2024</p>
+            <p class="animate delay-3" style="margin-top: 3rem; font-size: 0.9rem; color: var(--accent);">
+                КОНФИДЕНЦИАЛЬНО • ДЛЯ ВНУТРЕННЕГО ИСПОЛЬЗОВАНИЯ</p>
+        </div>
+
+        <!-- Slide 2: Company Profile -->
+        <div class="slide" id="slide-1">
+            <div class="slide-title animate">
+                <h2>Профиль Организации</h2>
+            </div>
+            <div class="content-grid">
+                <div class="info-card animate delay-1">
+                    <h3>Юридические данные</h3>
+                    <p class="data-value">ТОО «МФО Business Finance»</p>
+                    <p>БСН: 180740010314</p>
+                    <p style="margin-top:1rem;">Адрес: Алматы, р-н Алмалы, ул. Амангельды 59А, инд: A05B2T5</p>
+                </div>
+                <div class="info-card animate delay-2">
+                    <h3>Руководство</h3>
+                    <p class="data-value">Зуфарова К.М.</p>
+                    <p class="data-label">Директор (на основании Устава)</p>
+                </div>
+                <div class="info-card animate delay-3">
+                    <h3>Банковские реквизиты</h3>
+                    <p>АО «ForteBank», БИК: IRTYKZKA</p>
+                    <p>Счет: KZ4696502F0012055343</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Product Concept -->
+        <div class="slide" id="slide-2">
+            <div class="slide-title animate">
+                <h2>Концепция продукта</h2>
+            </div>
+            <div class="info-card animate delay-1" style="width: 100%;">
+                <p style="font-size: 1.2rem; margin-bottom: 2rem;">Программа кредитования направлена на полное
+                    удовлетворение потребностей субъектов <b>Малого Бизнеса</b> в Республике Казахстан.</p>
+                <div class="content-grid">
+                    <div>
+                        <h3>Целевое использование</h3>
+                        <ul class="bullet-list">
+                            <li>Пополнение оборотных средств</li>
+                            <li>Инвестиции в основные средства</li>
+                            <li>Расширение торговых площадей</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Формат финансирования</h3>
+                        <ul class="bullet-list">
+                            <li>Валюта: Тенге (индексация к валюте запрещена)</li>
+                            <li>Форма выдачи: Наличная / Безналичная</li>
+                            <li>Метод: Аннуитетные платежи</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Продукт "Беззалоговый" (Detail 1) -->
+        <div class="slide" id="slide-3">
+            <div class="slide-title animate">
+                <h2>1. ПРОДУКТ: «БЕЗЗАЛОГОВЫЙ»</h2>
+            </div>
+            <div class="content-grid">
+                <div class="info-card animate delay-1">
+                    <h3>Финансовые параметры</h3>
+                    <p class="data-value">500К - 2 млн ₸</p>
+                    <p class="data-label">Лимит на одного клиента</p>
+                    <div style="margin-top:1.5rem;">
+                        <p>Ставка: <span class="highlight">36% - 39% годовых</span></p>
+                        <p>Срок: <span class="highlight">до 24 месяцев</span></p>
+                    </div>
+                </div>
+                <div class="info-card animate delay-2">
+                    <h3>Портрет Заемщика</h3>
+                    <ul class="bullet-list">
+                        <li>ИП: Возраст 30 – 55 лет</li>
+                        <li>ТОО: Регистрация не менее 2-х лет</li>
+                        <li>Действующий бизнес: от 12 месяцев</li>
+                        <li>Локация: Алматы / Шымкент</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Продукт "Беззалоговый" (Detail 2) -->
+        <div class="slide" id="slide-4">
+            <div class="slide-title animate">
+                <h2>«БЕЗЗАЛОГОВЫЙ»: Условия и Риски</h2>
+            </div>
+            <div class="content-grid">
+                <div class="info-card animate delay-1">
+                    <h3>Обеспечение</h3>
+                    <p>Твердое обеспечение не требуется. По решению Уполномоченного органа может потребоваться
+                        <b>Гарантия</b> физического или юридического лица.
+                    </p>
+                </div>
+                <div class="info-card animate delay-2">
+                    <h3>Обязательные требования</h3>
+                    <ul class="bullet-list">
+                        <li>Отсутствие налоговой задолженности</li>
+                        <li>Положительный собственный капитал</li>
+                        <li>Отсутствие текущих просрочек</li>
+                        <li>Подтверждение доходов (скан-версии)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Продукт "С Гарантией" (Detail 1) -->
+        <div class="slide" id="slide-5">
+            <div class="slide-title animate">
+                <h2>2. ПРОДУКТ: «БЕЗЗАЛОГОВЫЙ С ГАРАНТИЕЙ»</h2>
+            </div>
+            <div class="content-grid">
+                <div class="info-card animate delay-1">
+                    <h3>Финансовые параметры</h3>
+                    <p class="data-value">1 млн - 3 млн ₸</p>
+                    <p class="data-label">Расширенный лимит</p>
+                    <div style="margin-top:1.5rem;">
+                        <p>Ставка: <span class="highlight">35% - 38% годовых</span></p>
+                        <p>Срок: <span class="highlight">до 36 месяцев</span></p>
+                    </div>
+                </div>
+                <div class="info-card animate delay-2">
+                    <h3>Особенности продукта</h3>
+                    <ul class="bullet-list">
+                        <li>Обязательная гарантия 3-х лиц</li>
+                        <li>Сниженная ставка (на 1% ниже стандарта)</li>
+                        <li>Увеличенный горизонт планирования</li>
+                        <li>Цель: Рост оборотного капитала</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Продукт "Под залог АВТО" (Detail 1) -->
+        <div class="slide" id="slide-6">
+            <div class="slide-title animate">
+                <h2>3. ПРОДУКТ: «ПОД ЗАЛОГ АВТО»</h2>
+            </div>
+            <div class="content-grid">
+                <div class="info-card animate delay-1">
+                    <h3>Финансовые параметры</h3>
+                    <p class="data-value">2 млн - 15 млн ₸</p>
+                    <p class="data-label">Средние кредиты</p>
+                    <div style="margin-top:1.5rem;">
+                        <p>Ставка: <span class="highlight">34% - 37.5% годовых</span></p>
+                        <p>LTV (Залоговый дисконт): <span class="highlight">не менее 50%</span></p>
+                    </div>
+                </div>
+                <div class="info-card animate delay-2">
+                    <h3>Требования к ТС</h3>
+                    <ul class="bullet-list">
+                        <li>Регистрация на залогодателе: > 9 мес.</li>
+                        <li>Исправное состояние, таможенная очистка</li>
+                        <li>Отсутствие обременений (кредит закрыт)</li>
+                        <li>Страхование КАСКО (по решению КК)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Продукт "Под залог АВТО" (Detail 2) -->
+        <div class="slide" id="slide-7">
+            <div class="slide-title animate">
+                <h2>АВТО: Квалификация по году выпуска</h2>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Страна производства</th>
+                        <th>Макс. возраст (на 2024 г)</th>
+                        <th>Условие выпуска</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Корея</td>
+                        <td>3 года</td>
+                        <td>не старше 2021 года</td>
+                    </tr>
+                    <tr>
+                        <td>Япония</td>
+                        <td>4 года</td>
+                        <td>не старше 2020 года</td>
+                    </tr>
+                    <tr>
+                        <td>Европа</td>
+                        <td>6 лет</td>
+                        <td>не старше 2018 года</td>
+                    </tr>
+                    <tr>
+                        <td>КНР / КНДР</td>
+                        <td>2 года</td>
+                        <td>не старше 2022 года</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Slide 9: Продукт "Недвижимость" (Detail 1) -->
+        <div class="slide" id="slide-8">
+            <div class="slide-title animate">
+                <h2>4. ПРОДУКТ: «ПОД ЗАЛОГ НЕДВИЖИМОСТИ»</h2>
+            </div>
+            <div class="content-grid" style="grid-template-columns: 2fr 1fr;">
+                <div class="info-card animate delay-1">
+                    <h3>Инвестиционный масштаб</h3>
+                    <p class="data-value">10 млн - 30 млн ₸</p>
+                    <p class="data-label">Крупное финансирование</p>
+                    <div class="content-grid" style="margin-top:1.5rem;">
+                        <div>
+                            <p>Ставка: <b>33% - 36%</b></p>
+                            <p>Срок: <b>13 - 36 мес.</b></p>
+                        </div>
+                        <div>
+                            <p>Коэффициент покрытия: <b>70%</b></p>
+                            <p>Локация: <b>г. Алматы</b></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-card animate delay-2">
+                    <h3>Экспресс Анализ</h3>
+                    <p>Применяется упрощенная форма проведения финансового анализа.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Недвижимость (Criteria) -->
+        <div class="slide" id="slide-9">
+            <div class="slide-title animate">
+                <h2>НЕДВИЖИМОСТЬ: Технические требования</h2>
+            </div>
+            <div class="content-grid">
+                <div class="info-card animate delay-1">
+                    <h3>Тип объекта</h3>
+                    <ul class="bullet-list">
+                        <li>Квартиры в многоквартирных домах</li>
+                        <li>Площадь: <b>не менее 30 кв.м.</b></li>
+                        <li>Состояние: Не аварийное</li>
+                    </ul>
+                </div>
+                <div class="info-card animate delay-2">
+                    <h3>Конструктив и возраст</h3>
+                    <ul class="bullet-list">
+                        <li>Год постройки: <b>от 1975 и новее</b></li>
+                        <li>Материал стен: Кирпич, монолит, ЖБ</li>
+                        <li>Расположение: Границы г. Алматы</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Процесс подачи (Application Form) -->
+        <div class="slide" id="slide-10">
+            <div class="slide-title animate">
+                <h2>Процедура подачи заявки</h2>
+            </div>
+            <div class="content-grid">
+                <div class="info-card animate delay-1">
+                    <h3>Состав Заявления</h3>
+                    <ul class="bullet-list">
+                        <li>Полные данные Заявителя (БИН / ИИН)</li>
+                        <li>Информация о банковских счетах</li>
+                        <li>Подтверждение подлинности данных</li>
+                        <li>Согласие на визит кредитного менеджера</li>
+                    </ul>
+                </div>
+                <div class="info-card animate delay-2">
+                    <h3>Права МФО при проверке</h3>
+                    <p>МФО оставляет за собой право обращаться к любым лицам (известным или неизвестным Заявителю) для
+                        содействия в принятии решения.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Кредитный процесс (Workflow) -->
+        <div class="slide" id="slide-11">
+            <div class="slide-title animate">
+                <h2>Этапы Кредитного Конвейера</h2>
+            </div>
+            <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                <div class="info-card animate delay-1" style="flex:1; text-align: center;">
+                    <div style="font-size: 2rem; color: var(--secondary);">01</div>
+                    <p><b>Сбор документов</b></p>
+                    <p style="font-size: 0.8rem; color: var(--text-dim);">Анкета, Скан-версии, Залог</p>
+                </div>
+                <div class="info-card animate delay-2" style="flex:1; text-align: center;">
+                    <div style="font-size: 2rem; color: var(--secondary);">02</div>
+                    <p><b>Фин. Анализ</b></p>
+                    <p style="font-size: 0.8rem; color: var(--text-dim);">Расчет капитала и потоков</p>
+                </div>
+                <div class="info-card animate delay-3" style="flex:1; text-align: center;">
+                    <div style="font-size: 2rem; color: var(--secondary);">03</div>
+                    <p><b>Решение</b></p>
+                    <p style="font-size: 0.8rem; color: var(--text-dim);">Кредитный комитет / УО</p>
+                </div>
+                <div class="info-card animate delay-1" style="flex:1; text-align: center;">
+                    <div style="font-size: 2rem; color: var(--secondary);">04</div>
+                    <p><b>Выдача</b></p>
+                    <p style="font-size: 0.8rem; color: var(--text-dim);">Договор и зачисление</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Risk & Penalties (Detailed) -->
+        <div class="slide" id="slide-12">
+            <div class="slide-title animate">
+                <h2>Штрафные санкции и ответственность</h2>
+            </div>
+            <div class="content-grid">
+                <div class="info-card animate delay-1">
+                    <h3>Стандартная неустойка</h3>
+                    <p class="data-value">0.5% в день</p>
+                    <p>Начисляется за каждый день просрочки от суммы просроченного платежа (как по ОД, так и по
+                        вознаграждению).</p>
+                </div>
+                <div class="info-card animate delay-2">
+                    <h3>Материальное нарушение</h3>
+                    <p>В случае просрочки более <b>40 календарных дней</b>, Кредитор вправе потребовать досрочного
+                        возврата <b>всей суммы</b> микрокредита.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: Calculated Example: Penalty -->
+        <div class="slide" id="slide-13">
+            <div class="slide-title animate">
+                <h2>Пример расчета пени</h2>
+            </div>
+            <div class="info-card animate delay-1">
+                <p>Кейс: Клиент допустил просрочку ежемесячного платежа в 100 000 ₸ на 10 дней.</p>
+                <div class="math-box">
+                    Сумма просрочки: 100 000 ₸<br>
+                    Ставка пени: 0.5% (0.005) в день<br>
+                    Кол-во дней: 10<br><br>
+                    Расчет: 100 000 * 0.005 * 10 = 5 000 ₸<br>
+                    Итого к оплате: 105 000 ₸
+                </div>
+                <p style="margin-top: 1rem; color: var(--accent); font-size: 0.8rem;"><i>*Аналогичный расчет применяется
+                        отдельно к сумме просроченного вознаграждения.</i></p>
+            </div>
+        </div>
+
+        <!-- Slide 15: Досрочное погашение -->
+        <div class="slide" id="slide-14">
+            <div class="slide-title animate">
+                <h2>Порядок досрочного погашения (ЧДП/ПДП)</h2>
+            </div>
+            <div class="content-grid">
+                <div class="info-card animate delay-1">
+                    <h3>Минимальный порог</h3>
+                    <p>Для осуществления частично досрочного погашения сумма должна быть <b>не менее трех последующих
+                            ежемесячных платежей</b>.</p>
+                </div>
+                <div class="info-card animate delay-2">
+                    <h3>Отсутствие моратория</h3>
+                    <p>Досрочное погашение разрешено в любое время без уплаты штрафов, с уплатой вознаграждения за
+                        фактический срок пользования.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 16: Обязательства по договору -->
+        <div class="slide" id="slide-15">
+            <div class="slide-title animate">
+                <h2>Права и Обязанности сторон</h2>
+            </div>
+            <div class="content-grid">
+                <div class="info-card animate delay-1">
+                    <h3>Кредитор обязан</h3>
+                    <ul class="bullet-list">
+                        <li>Соблюдать тайну предоставления микрокредита</li>
+                        <li>Уведомить о переуступке прав (за 30 дней)</li>
+                        <li>Применять "улучшающие" условия в одностороннем порядке</li>
+                    </ul>
+                </div>
+                <div class="info-card animate delay-2">
+                    <h3>Заемщик обязан</h3>
+                    <ul class="bullet-list">
+                        <li>Предоставлять фин. отчетность ежегодно (до 10 числа)</li>
+                        <li>Не менять правовой статус без согласия МФО</li>
+                        <li>Обеспечить наличие денег на счету до 17:00 дня платежа</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 17: Monitoring & Inspections -->
+        <div class="slide" id="slide-16">
+            <div class="slide-title animate">
+                <h2>Мониторинг целевого использования</h2>
+            </div>
+            <div class="info-card animate delay-1" style="width:100%;">
+                <p>МФО имеет право в любое время проводить проверку фактического использования средств.</p>
+                <div class="content-grid" style="margin-top: 2rem;">
+                    <div>
+                        <h3>Инструменты контроля</h3>
+                        <ul class="bullet-list">
+                            <li>Выезд по месту ведения бизнеса</li>
+                            <li>Привлечение независимых экспертов (аудиторов)</li>
+                            <li>Запрос банковских выписок</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Назначение управляющего</h3>
+                        <p>В случае ухудшения финансового состояния (за период 3 мес.) МФО вправе назначить <b>внешнего
+                                управляющего</b>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 18: Summary Table (Rates) -->
+        <div class="slide" id="slide-17">
+            <div class="slide-title animate">
+                <h2>Сводная таблица параметров</h2>
+            </div>
+            <table style="font-size: 0.85rem;">
+                <thead>
+                    <tr>
+                        <th>Продукт</th>
+                        <th>Макс. Лимит</th>
+                        <th>Ставка (мин-макс)</th>
+                        <th>Срок (мес)</th>
+                        <th>Обеспечение</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Беззалоговый</td>
+                        <td>2 000 000 ₸</td>
+                        <td>36.0% - 39.0%</td>
+                        <td>до 24</td>
+                        <td>Гарантия (опц.)</td>
+                    </tr>
+                    <tr>
+                        <td>С Гарантией</td>
+                        <td>3 000 000 ₸</td>
+                        <td>35.0% - 38.0%</td>
+                        <td>до 36</td>
+                        <td>Гарантия (обяз.)</td>
+                    </tr>
+                    <tr>
+                        <td>Залог Авто</td>
+                        <td>15 000 000 ₸</td>
+                        <td>34.0% - 37.5%</td>
+                        <td>13 - 36</td>
+                        <td>Авто (LTV 50%)</td>
+                    </tr>
+                    <tr>
+                        <td>Недвижимость</td>
+                        <td>30 000 000 ₸</td>
+                        <td>33.0% - 36.0%</td>
+                        <td>13 - 36</td>
+                        <td>Квартира (70% покр)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Slide 19: Dispute Resolution -->
+        <div class="slide" id="slide-18">
+            <div class="slide-title animate">
+                <h2>Юридическое сопровождение и споры</h2>
+            </div>
+            <div class="content-grid">
+                <div class="info-card animate delay-1">
+                    <h3>Разрешение споров</h3>
+                    <p>Все неурегулированные споры рассматриваются в <b>Специализированном межрайонном экономическом
+                            суде города Алматы</b>.</p>
+                </div>
+                <div class="info-card animate delay-2">
+                    <h3>Коллекторское взыскание</h3>
+                    <p>МФО вправе передавать задолженность для досудебного взыскания и урегулирования коллекторским
+                        агентствам.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 20: Growth Dynamics (Assets & Portfolio) -->
+        <div class="slide" id="slide-19">
+            <div class="slide-title animate">
+                <h2>Динамика Роста: Активы и Портфель</h2>
+            </div>
+            <div class="info-card animate delay-1" style="width: 100%;">
+                <p style="margin-bottom: 1rem;">Стабильный рост основных показателей за 5 лет (тыс. тенге)</p>
+                <div class="chart-container">
+                    <div class="chart-bar-group">
+                        <div class="chart-bar" style="height: 42%;">
+                            <div class="chart-value">180K</div>
+                        </div>
+                        <div class="chart-label">2020</div>
+                    </div>
+                    <div class="chart-bar-group">
+                        <div class="chart-bar" style="height: 47%;">
+                            <div class="chart-value">198K</div>
+                        </div>
+                        <div class="chart-label">2021</div>
+                    </div>
+                    <div class="chart-bar-group">
+                        <div class="chart-bar" style="height: 52%;">
+                            <div class="chart-value">219K</div>
+                        </div>
+                        <div class="chart-label">2022</div>
+                    </div>
+                    <div class="chart-bar-group">
+                        <div class="chart-bar" style="height: 83%;">
+                            <div class="chart-value">351K</div>
+                        </div>
+                        <div class="chart-label">2023</div>
+                    </div>
+                    <div class="chart-bar-group">
+                        <div class="chart-bar" style="height: 100%;">
+                            <div class="chart-value">421K</div>
+                        </div>
+                        <div class="chart-label">2024</div>
+                    </div>
+                </div>
+                <div class="content-grid" style="margin-top: 2rem;">
+                    <div>
+                        <p class="data-label">Темп роста активов</p>
+                        <p class="data-value" style="color:var(--secondary);">+133%</p>
+                        <p style="font-size: 0.8rem;">Активы выросли со 180 млн до 421 млн тенге</p>
+                    </div>
+                    <div>
+                        <p class="data-label">Рост ссудного портфеля</p>
+                        <p class="data-value" style="color:var(--secondary);">+128%</p>
+                        <p style="font-size: 0.8rem;">Портфель достиг 394.8 млн тенге в 2024 г.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 21: Profitability Trend -->
+        <div class="slide" id="slide-20">
+            <div class="slide-title animate">
+                <h2>Анализ прибыльности (Net Profit)</h2>
+            </div>
+            <div class="info-card animate delay-1" style="width: 100%;">
+                <p>Тренд чистой прибыли группы (тыс. тенге)</p>
+                <div class="profit-line-container">
+                    <!-- Simple absolute positioning for nodes based on data -->
+                    <div class="trend-node" style="left: 10%; bottom: 35%;">
+                        <div class="trend-label">15.8K</div>
+                    </div>
+                    <div class="trend-node" style="left: 30%; bottom: 27%;">
+                        <div class="trend-label">12.2K</div>
+                    </div>
+                    <div class="trend-node" style="left: 50%; bottom: 42%;">
+                        <div class="trend-label">19.2K</div>
+                    </div>
+                    <div class="trend-node" style="left: 70%; bottom: 70%;">
+                        <div class="trend-label">31.7K</div>
+                    </div>
+                    <div class="trend-node" style="left: 90%; bottom: 100%;">
+                        <div class="trend-label">44.9K</div>
+                    </div>
+                    <!-- SVG Path for the line -->
+                    <svg width="100%" height="100%" style="position:absolute; top:0; left:0;">
+                        <polyline points="144,195 432,219 720,174 1008,90 1296,0" fill="none" stroke="var(--secondary)"
+                            stroke-width="3" stroke-dasharray="2000" stroke-dashoffset="2000" class="draw-line" />
+                    </svg>
+                    <style>
+                        .active .draw-line {
+                            animation: draw 2s forwards;
+                        }
+
+                        @keyframes draw {
+                            to {
+                                stroke-dashoffset: 0;
+                            }
+                        }
+                    </style>
+                </div>
+                <div class="analytics-summary animate delay-2">
+                    <p>Среднегодовой рост прибыли (CAGR) составил <b>~53%</b> за период 2020-2024 гг. Пиковая доходность
+                        зафиксирована в 2024 году.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 22: Capitalization & Equity -->
+        <div class="slide" id="slide-21">
+            <div class="slide-title animate">
+                <h2>Собственный капитал и Устойчивость</h2>
+            </div>
+            <div class="content-grid">
+                <div class="info-card animate delay-1">
+                    <h3>Динамика капитала</h3>
+                    <p class="data-value">238 млн ₸</p>
+                    <p class="data-label">Капитал на конец 2024 года</p>
+                    <ul class="bullet-list" style="margin-top: 1.5rem;">
+                        <li>2020: 130 млн ₸</li>
+                        <li>2021: 142 млн ₸</li>
+                        <li>2022: 161 млн ₸</li>
+                        <li>2023: 193 млн ₸</li>
+                        <li>2024: 238 млн ₸</li>
+                    </ul>
+                </div>
+                <div class="info-card animate delay-2">
+                    <h3>Ключевые факторы</h3>
+                    <ul class="bullet-list">
+                        <li>Увеличение Уставного капитала до 200 млн ₸</li>
+                        <li>Высокий уровень реинвестирования прибыли</li>
+                        <li>Коэффициент автономии поддерживается на уровне выше 0.5</li>
+                        <li>Рост доверия со стороны акционеров</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 23: Strategic Summary Analysis -->
+        <div class="slide" id="slide-22">
+            <div class="slide-title animate">
+                <h2>Стратегический анализ компании</h2>
+            </div>
+            <div class="analytics-summary animate delay-1" style="border-left: 5px solid var(--secondary);">
+                <div style="display: flex; align-items: center; margin-bottom: 2rem;">
+                    <div class="growth-badge">В 2.3 РАЗА</div>
+                    <p>выросли общие активы компании за отчетный период.</p>
+                </div>
+                <div style="display: flex; align-items: center; margin-bottom: 2rem;">
+                    <div class="growth-badge">В 2.8 РАЗА</div>
+                    <p>увеличилась чистая прибыль, демонстрируя высокую маржинальность.</p>
+                </div>
+                <div style="display: flex; align-items: center; margin-bottom: 2rem;">
+                    <button class="btn" style="pointer-events: none;">STRENGHT</button>
+                    <p style="margin-left: 1rem;">Сбалансированное расширение кредитного портфеля при сохранении
+                        качества залогов (50-70% покрытие).</p>
+                </div>
+            </div>
+            <div class="content-grid animate delay-2">
+                <div class="info-card">
+                    <h3>Прогноз 2025</h3>
+                    <p>Ожидается преодоление отметки в 500 млн ₸ по активам и расширение присутствия в южных регионах
+                        РК.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 24: Final -->
+        <div class="slide" style="justify-content: center; align-items: center; text-align: center;" id="slide-23">
+            <h2 class="animate" style="color: var(--secondary); font-size: 3rem;">БЛАГОДАРИМ ЗА ВНИМАНИЕ</h2>
+            <div class="animate delay-1"
+                style="height: 1px; width: 200px; background: var(--secondary); margin: 2rem 0;"></div>
+            <p class="animate delay-2">Управленческий отчет подготовлен для принятия стратегических решений</p>
+            <p class="animate delay-3" style="margin-top: 2rem; color: var(--accent);">Business Finance — Ваш надежный
+                партнер в мире микрофинансирования</p>
+        </div>
+
+    </div>
+
+    <div class="controls">
+        <button class="btn" id="prev">Назад</button>
+        <button class="btn" id="next">Вперед</button>
+    </div>
+
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+        }
+
+        th,
+        td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--primary);
+            color: var(--secondary);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .highlight {
+            color: var(--secondary);
+            font-weight: 700;
+        }
+    </style>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const prevBtn = document.getElementById('prev');
+        const nextBtn = document.getElementById('next');
+        const progress = document.getElementById('progress');
+        const presentation = document.querySelector('.presentation');
+        let currentSlide = 0;
+
+        function updateSlide() {
+            slides.forEach((slide, index) => {
+                slide.classList.toggle('active', index === currentSlide);
+            });
+            progress.style.width = `${((currentSlide + 1) / slides.length) * 100}%`;
+        }
+
+        function nextSlide() {
+            if (currentSlide < slides.length - 1) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        nextBtn.addEventListener('click', nextSlide);
+        prevBtn.addEventListener('click', prevSlide);
+
+        // Touch Gestures
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const minSwipeDistance = 50;
+
+        presentation.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        presentation.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+
+        function handleSwipe() {
+            const distance = touchEndX - touchStartX;
+            if (Math.abs(distance) > minSwipeDistance) {
+                if (distance < 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+    </script>
+</body>
+
+</html>

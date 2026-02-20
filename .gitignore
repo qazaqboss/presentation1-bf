@@ -1,0 +1,25 @@
+# System files
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+.env/
+
+# Temp/Extraction files - these seem to be processing scripts/outputs
+extract_all_pdfs.py
+extract_pdfs.py
+debug_pdfs.py
+all_extracted_text.txt
+extracted_text.txt
+
+# Archives
+*.zip
+
+# Gemini/Antigravity storage
+.gemini/
