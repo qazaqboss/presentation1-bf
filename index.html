@@ -163,10 +163,12 @@
         }
 
         .hero h1 {
-            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-size: clamp(2rem, 8vw, 5rem);
             color: var(--secondary);
             margin-bottom: 1rem;
             line-height: 1.1;
+            overflow-wrap: break-word;
+            hyphens: auto;
         }
 
         .hero-divider {
@@ -201,7 +203,7 @@
         .content-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
+            gap: 2.5rem;
             width: 100%;
         }
 
@@ -209,8 +211,8 @@
             background: var(--bg-card);
             backdrop-filter: var(--glass);
             -webkit-backdrop-filter: var(--glass);
-            padding: 2.5rem;
-            border-radius: 12px;
+            padding: clamp(1.5rem, 5vw, 2.5rem);
+            border-radius: 16px;
             border: 1px solid var(--border);
             transition: var(--transition);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
@@ -295,14 +297,21 @@
             padding: 1.25rem;
             text-align: left;
             border-bottom: 1px solid var(--border);
+            white-space: normal;
+        }
+
+        td:nth-child(2),
+        td:nth-child(3) {
+            white-space: nowrap;
         }
 
         th {
-            background: rgba(212, 175, 55, 0.05);
+            background: rgba(212, 175, 55, 0.08);
             color: var(--secondary);
             text-transform: uppercase;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 800;
+            white-space: nowrap;
         }
 
         .chart-container {
@@ -423,14 +432,43 @@
 
             .content-grid {
                 grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .info-card {
+                padding: 1.5rem;
             }
 
             .slide-title h2 {
-                font-size: 1.8rem;
+                font-size: clamp(1.5rem, 6vw, 2rem);
+                line-height: 1.2;
             }
 
             .data-value {
-                font-size: 1.5rem;
+                font-size: clamp(1.4rem, 5vw, 2rem);
+            }
+
+            /* Table Mobile Optimization */
+            .table-container {
+                margin: 0 -5px;
+                /* Pull slightly to edges */
+                width: calc(100% + 10px);
+                border-radius: 8px;
+            }
+
+            table {
+                min-width: 650px;
+            }
+
+            th,
+            td {
+                padding: 1rem 0.8rem;
+                font-size: 0.85rem;
+            }
+
+            td:first-child {
+                font-weight: 600;
+                color: var(--secondary);
             }
         }
 
